@@ -58,9 +58,13 @@ jobs:
     - name: Update Kubernetes resources
       run: |
           echo "`ls`"
-          cd manifests/overlays/prod
-          kustomize edit set image ${{ env.REPO_ACCOUNT }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
-          cat kustomization.yaml
+          for overlay in prod edu-goods edu-user; do
+              cd manifests/overlays/$overlay
+              kustomize edit set image ${{ env.REPO_ACCOUNT }}/${{ env.IMAGE_NAME }}:${{ env.VERSION }}
+              echo "Updated kustomization.yaml for $overlay:"
+              cat kustomization.yaml
+              cd - > /dev/null
+          done
           
     - name: Commit files
       run: |
