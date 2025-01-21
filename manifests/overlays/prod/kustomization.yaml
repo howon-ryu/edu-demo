@@ -10,4 +10,4 @@ patchesStrategicMerge:
 - ingress.yaml
 images:
 - name: ydcho0902/k8s-edu
-  newTag: "202501191311"
+  newTag: "202501212323"
