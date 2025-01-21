@@ -1,13 +1,13 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: k8s-edu-user-configmap
-  namespace: default
+  name: k8s-edu-goods-configmap
+  namespace: edu-goods
 data:
   application.yml: |
     app:
       run:
-        type: prod
+        type: goods
     goods:
       service:
         url: http://edu-goods.edu-goods-ns.svc.cluster.local

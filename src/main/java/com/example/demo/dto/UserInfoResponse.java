@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * packageName    : com.example.demo.dto
  * fileName       : UserDto
@@ -20,7 +22,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
+public class UserInfoResponse {
     private String userNo;
     private String userName;
+    private List<Product> products;
+
 }

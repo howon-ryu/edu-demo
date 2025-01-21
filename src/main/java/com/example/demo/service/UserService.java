@@ -1,8 +1,12 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.UserDto;
+import com.example.demo.dto.UserInfoResponse;
+import com.example.demo.dto.UserPurchaseResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.Collections;
 
 /**
  * packageName    : com.example.demo.service
@@ -18,18 +22,44 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
+    private final RestTemplate restTemplate;
+
+    // edu-goods 서비스 베이스 URL k8s configMap 통해 주입받음
+    @Value("${goods.service.url:http://edu-goods.211.253.25.128.sslip.io}")
+    private String goodsServiceUrl;
+
+    @Value("${app.run.type:local}")
     String appRunType;
 
-    public UserService(@Value("${app.run.type:local}") String appRunType) {
-        this.appRunType = appRunType;
+    public UserService(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
-    public UserDto getUserByuserNo(String userNo) {
+//    public UserService(@Value("${app.run.type:local}") String appRunType) {
+//        this.appRunType = appRunType;
+//    }
 
-        UserDto userDto = UserDto.builder()
+    public UserInfoResponse getUserByuserNo(String userNo) {
+
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
                 .userNo(userNo)
                 .userName(appRunType + "-" + userNo)
                 .build();
-        return userDto;
+
+        // edu-goods 서비스 호출
+        String url = goodsServiceUrl + "/api/v1/user/" + userNo + "/products";
+        try {
+            UserPurchaseResponse userPurchaseResponse = restTemplate.getForObject(url, UserPurchaseResponse.class);
+            if (userPurchaseResponse != null) {
+                userInfoResponse.setProducts(userPurchaseResponse.getProducts());
+            } else {
+                userInfoResponse.setProducts(Collections.emptyList());
+            }
+        } catch (Exception e) {
+            // 예외 처리 - 상품 리스트를 빈 리스트로 설정
+            userInfoResponse.setProducts(Collections.emptyList());
+        }
+
+        return userInfoResponse;
     }
 }

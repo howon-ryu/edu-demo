@@ -1,8 +1,7 @@
 package com.example.demo.controller;
 
-import com.example.demo.dto.UserDto;
+import com.example.demo.dto.UserInfoResponse;
 import com.example.demo.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +23,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/user")
 public class UserRestController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserRestController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/{userNo}")
-    public ResponseEntity<UserDto> getUserByuserNo(@PathVariable String userNo) {
-        UserDto userDto = userService.getUserByuserNo(userNo);
-        return ResponseEntity.ok(userDto);
+    public ResponseEntity<UserInfoResponse> getUserByuserNo(@PathVariable String userNo) {
+        UserInfoResponse userInfoResponse = userService.getUserByuserNo(userNo);
+        return ResponseEntity.ok(userInfoResponse);
     }
 }

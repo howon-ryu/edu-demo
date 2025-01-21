@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: k8s-edu-goods-pvc
+  namespace: edu-goods
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: nfs-storageclass
+  resources:
+    requests:
+      storage: 1Gi

@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: k8s-edu-deployment
-  namespace: default
+  name: k8s-edu-user-deployment
+  namespace: edu-user
 spec:
   selector:
     matchLabels:
-      app: k8s-edu-app
+      app: k8s-edu-user-app
   replicas: 1
   template:
     metadata:
       labels:
-        app: k8s-edu-app
+        app: k8s-edu-user-app
     spec:
       containers:
-        - name: k8s-edu-app
-          image: ydcho0902/k8s-edu:v0.0.1      # dockerhub image repository : repo/image명:Tag
+        - name: k8s-edu-user-app
+          image: ydcho0902/k8s-edu             # dockerhub image repository : repo/image명:Tag
           imagePullPolicy: IfNotPresent        # k8s 클러스터에 다운로드 된 이미지 없으면 다운 or Always
           ports:
             - name: http
